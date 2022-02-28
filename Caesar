@@ -1,0 +1,55 @@
+using System;
+
+public class CaesarCipher
+{
+    string alfabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+    private string CodeEncode(string input, int key)
+    {
+        string fullAlfabet = alfabet + alfabet.ToLower();
+        int letterQty = fullAlfabet.Length;
+        string retVal = "";
+        for (int i = 0; i < input.Length; i++)
+        {
+            char c = input[i];
+            int index = fullAlfabet.IndexOf(c);
+            if (index < 0)
+            {
+                retVal += c.ToString();
+            }
+            else
+            {
+                int  codeIndex = (letterQty + index + key) % letterQty;
+                retVal += fullAlfabet[codeIndex];
+            }
+        }
+
+        return retVal;
+    }
+
+    public string Encrypt(string plainMessage, int key)
+    {
+        return CodeEncode(plainMessage, key);
+    }
+
+
+    public string Decrypt(string encryptedMessage, int key)
+    {
+        return CodeEncode(encryptedMessage, -key);
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        CaesarCipher cipher = new CaesarCipher();  
+        Console.Write("Введите текст: ");
+        string message = Console.ReadLine();
+        Console.Write("Введите ключ: ");
+        int secretKey = Convert.ToInt32(Console.ReadLine());
+        string encryptedText = cipher.Encrypt(message, secretKey);
+        Console.WriteLine("Зашифрованное сообщение: {0}", encryptedText);
+        Console.WriteLine("Расшифрованное сообщение: {0}", cipher.Decrypt(encryptedText, secretKey));
+
+    }
+}
