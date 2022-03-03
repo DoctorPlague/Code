@@ -1,0 +1,28 @@
+public class Person
+{
+    public int voz;
+    public string Age 
+    {
+        set
+        {   
+            var a = value;
+            var date = DateTime.ParseExact(a, "dd.MM.yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            var age = DateTime.Now.Year - date.Year;
+            if (DateTime.Now.Month < date.Month || (DateTime.Now.Month == date.Month && DateTime.Now.Day < date.Day)) age--;
+            voz = age;
+        }
+        get { return Convert.ToString(voz); }
+    }
+}
+namespace pupil
+{
+    class normal
+    {
+        static void Main(string[] args)
+        {
+            Person Man = new Person();
+            Man.Age = Console.ReadLine();
+            Console.WriteLine(Man.Age);
+        }
+    }
+}
