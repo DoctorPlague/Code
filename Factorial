@@ -1,0 +1,16 @@
+class Fack
+{
+    static int fack(int n)
+    {
+            if (n == 1)
+            {
+                return 1;
+            }
+            return n * fack(n - 1);
+    }
+    static void Main(string[] args)
+    {
+        int a = int.Parse(Console.ReadLine());
+        Console.WriteLine(fack(a));
+    }
+}
