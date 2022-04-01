@@ -1,0 +1,137 @@
+class Program
+{   
+    public class Account
+    {
+        public string Id { get; set; }
+        public Bank Bank { get; set; }
+        public Client Client { get; set; }
+        public Currency Currency { get; set; }
+        public decimal Balance { get; set; }
+
+        public Account(string id, Bank bank, Client client, Currency currency)
+        {
+            Client = client;
+            Id = id;
+            Bank = bank;
+            Currency = currency;
+        }
+    }
+    public enum PaymentType
+    {
+        Visa,
+        MasterCard,
+        MIR,
+        PayPal
+    }
+    public enum Currency
+    {
+        Euro,
+        Dollar,
+        Ruble,
+        Yuan
+    }
+    public class Bank
+    {
+        public string Name { get; set; }
+        public Bank(string name)
+        {
+            Name = name;
+        }
+    }
+    public class Card
+    {
+        public string Number { get; set; }
+        public Bank Bank { get; set; }
+        public string CVV { get; set; }
+        public DateTime ValidTrue { get; set; }
+        public Client User { get; set; }
+        public PaymentType PaymentType { get; set; }
+        public Account Account { get; set; }
+        public Card(string number, Bank bank, string cvv, Client user, DateTime validTrue, PaymentType paymentType, Account account)
+        {
+            Number = number;
+            Bank = bank;
+            CVV = cvv;
+            ValidTrue = validTrue;
+            PaymentType = paymentType;
+            User = user;
+            Account = account;
+        }
+        public Check Withdraw(decimal value)
+        {
+            if (Account.Balance < value) return null;
+            Account.Balance -= value;
+            return new Check();
+        }
+        public Check Refill(decimal value)
+        {
+            if (Account.Balance < value) return null;
+            Account.Balance += value;
+            return new Check();
+        }
+    }
+    public class Client
+    {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string MiddleName { get; set; }
+        public Client(string name, string surname)
+        {
+            Name = name;
+            Surname = surname;
+        }
+        public Client(string name, string surname, string middleName)
+            : this(name, surname)
+        {
+            MiddleName = middleName;
+        }
+    }
+    public class Check
+    {
+        public int TransactionNumber { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public Bank BankName { get; set; }
+        public string AccountID { get; set; }
+        public decimal Balance { get; set; }
+        public Check()
+        {
+            Random random = new Random();
+            TransactionNumber = random.Next(10000, 99999);
+            TransactionDate = DateTime.Now;
+            BankName = BankName;
+            AccountID = "1231";
+            Console.WriteLine(TransactionNumber);
+            Console.WriteLine(TransactionDate);
+            Console.WriteLine(BankName);
+            Console.WriteLine(AccountID);
+        }
+
+    }
+    static void Main(string[] args)
+    {
+        Bank Sberbank = new Bank("Сбербанк");
+        Bank Tinkoff = new Bank("Тинькофф");
+
+        Client Sava = new Client("Сарбаев", "Савелий", "Дмитриевич");
+
+        Account SberAcc = new Account("85920566820485715379", Sberbank, Sava, Currency.Dollar);
+        Account TinAcc = new Account("56783459275610675925", Tinkoff, Sava, Currency.Yuan);
+
+        Card SberCard = new Card("4817 2009 7115 1411", Sberbank, "618", Sava, new DateTime(2024 / 8 / 11), PaymentType.MIR, SberAcc);
+        Card TinCard = new Card("5323 5002 8916 6157", Tinkoff, "923", Sava, new DateTime(2025 / 05 / 03), PaymentType.MasterCard, TinAcc);
+
+        SberAcc.Balance = 25000m;
+        TinAcc.Balance = 36560m;
+
+        var check = SberCard.Withdraw(4000m);
+
+        Console.WriteLine(SberCard.Withdraw(4000m));
+
+        //Console.WriteLine(check);
+        Console.WriteLine(TinCard.Refill(2034));
+
+
+        //Console.WriteLine(check);
+    }
+}
+
